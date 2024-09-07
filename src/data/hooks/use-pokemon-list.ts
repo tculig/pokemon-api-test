@@ -1,7 +1,7 @@
 
-import { type PokemonDetails, type PokemonResponse } from '#/types/pokemon';
-import { promiseAllSettledWithRetry } from '#/util';
+import { type PokemonDetails, type PokemonResponse } from 'types/pokemon';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { promiseAllSettledWithRetry } from 'utils';
 
 const usePokemonList = () =>
     useInfiniteQuery({
