@@ -28,9 +28,10 @@ import Link from "next/link"
 import { useCallback, type JSX, type SVGProps } from "react"
 import { pokemonTypes, type Pokemon } from "types/pokemon"
 import Image from "next/image";
-import { zeroPad } from "utils";
+import { isValidPokemonType, zeroPad } from "utils";
 import { BellElectricIcon, BugIcon, FlameIcon, GlassWaterIcon, GrapeIcon } from "lucide-react";
 import { Tooltip } from 'react-tooltip'
+import { TypeIcon } from "components/ui/type-icon";
 
 interface Props {
   data: Pokemon[],
@@ -42,7 +43,7 @@ export const Pokedex = ({ data, isFetching }: Props) => {
   const generateItem = useCallback((pokemon: Pokemon, index: number) => {
     return (
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="relative justify-center flex">
+        <div className="relative justify-center items-center flex pt-4">
           {pokemon.details?.sprites.front_default ? (
             <Image
               src={pokemon.details?.sprites.front_default}
@@ -55,17 +56,15 @@ export const Pokedex = ({ data, isFetching }: Props) => {
             #{zeroPad(index, 3)}
           </div>
         </div>
-        <div className="p-4">
+        <div className="px-4 pb-4">
           <h3 className="text-lg font-bold text-gray-800 mb-2">{pokemon.name}</h3>
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
-              <GrapeIcon className="h-5 w-5 text-green-500" data-tooltip-id={`tooltip-${index}`} data-tooltip-content="Hello world!"/>
-              <Tooltip id={`tooltip-${index}`} />
-              <BugIcon className="h-5 w-5 text-purple-500" />
-              <FlameIcon className="h-5 w-5 text-red-500" />
-              <GlassWaterIcon className="h-5 w-5 text-blue-500" />
-              <BellElectricIcon className="h-5 w-5 text-yellow-500" />
-            </div>
+            {pokemon.details?.types.map(
+            (typeInfo) => typeInfo.type.name).map(
+              (type, index) => <TypeIcon type={isValidPokemonType(type) ? type : "normal"} key={index} />
+            )}
+             </div>
             <Link
               href="#"
               className="bg-[#e3350d] text-white font-bold py-2 px-4 rounded-full text-sm hover:bg-[#c02b0a] transition-colors"
