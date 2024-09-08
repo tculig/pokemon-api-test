@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { FixedSizeList as List, type ListOnScrollProps, type ListChildComponentProps } from 'react-window';
-import { SkeletonLoader } from '../../components/skeleton';
+import { SkeletonLoader } from '../../components/ui/skeleton';
 import { usePokemonList } from 'data/hooks/use-pokemon-list';
 import { PokemonTableV0 } from 'components/component/pokemon-table';
 import { Pokedex } from 'components/component/pokedex';

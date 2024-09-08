@@ -1,19 +1,18 @@
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../ui/table"
 import { Badge } from "../ui/badge"
-import { type InfiniteData } from "@tanstack/react-query"
-import { type Pokemon, type PokemonResponse } from "types/pokemon"
+import { type Pokemon } from "types/pokemon"
 import { type UIEventHandler, useCallback } from "react"
 import Image from "next/image";
-import { SkeletonLoader } from "components/skeleton"
 import { isValidPokemonType } from "utils"
+import { SkeletonLoader } from "components/ui/skeleton"
 
 interface Props {
-  data: InfiniteData<PokemonResponse, unknown> | undefined,
+  data: Pokemon[],
   isFetching: boolean,
   onScroll?: UIEventHandler<HTMLDivElement>,
 }
 
-export const PokemonTableV0 = ({ data, isFetching, onScroll }: Props) => {
+export const PokemonTable = ({ data, isFetching, onScroll }: Props) => {
 
   const generateRow = useCallback((data: Pokemon) => {
     return (
@@ -34,7 +33,7 @@ export const PokemonTableV0 = ({ data, isFetching, onScroll }: Props) => {
         <TableCell>
           {data.details?.types.map(
             (typeInfo) => typeInfo.type.name).map(
-              (type, index) => <Badge variant="outline" type={isValidPokemonType(type) ? type : "normal"} key={index}/>
+              (type, index) => <Badge variant="outline" type={isValidPokemonType(type) ? type : "normal"} key={index} />
             )}
         </TableCell>
       </TableRow>
@@ -53,11 +52,10 @@ export const PokemonTableV0 = ({ data, isFetching, onScroll }: Props) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.pages?.map(el => {
-              return el?.results?.map(res => {
-                return generateRow(res)
-              })
-            })}
+            {data.map(res => {
+              return generateRow(res)
+            })
+            }
             {isFetching ? (
               <SkeletonLoader rows={20} />
             ) : null}

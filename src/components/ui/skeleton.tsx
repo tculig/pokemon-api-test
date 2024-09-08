@@ -1,5 +1,5 @@
 
-import { TableCell, TableRow } from "./ui/table";
+import { TableCell, TableRow } from "./table";
 
 interface Props {
   rows: number

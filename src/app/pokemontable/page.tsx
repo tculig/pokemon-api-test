@@ -2,12 +2,15 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { usePokemonList } from 'data/hooks/use-pokemon-list';
-import { PokemonTableV0 } from 'components/component/pokemon-table';
+import { PokemonTable } from 'components/component/pokemon-table';
 import { Header } from 'components/component/header';
+import { type Pokemon } from 'types/pokemon';
 
-export default function PokemonTable() {
+export default function PokemonTableView() {
   const { data: pokemonData, isLoading, fetchNextPage, isFetchingNextPage, isFetching, hasNextPage } = usePokemonList();
   const [scrollPositionFromBottom, setScrollPositionFromBottom] = useState(999);
+  const [filteredResults, setFilteredResults] = useState<Pokemon[]>([]);
+  const [searchText, setSearchText] = useState("");
 
   const onScroll = useCallback(
     (event: React.UIEvent<HTMLElement>) => {
@@ -18,6 +21,20 @@ export default function PokemonTable() {
     [setScrollPositionFromBottom]
   );
 
+  const onSearch = useCallback((newSearchText: string) => {
+    setSearchText(newSearchText)
+  }, [])
+
+  useEffect(() => {
+    if (!pokemonData || pokemonData?.pages?.length == 0) return;
+    const loadedPokemon = pokemonData.pages.map(el => el.results).flat();
+    if (searchText != "") {
+      setFilteredResults(loadedPokemon.filter(el => el.name.includes(searchText)));
+    } else {
+      setFilteredResults(loadedPokemon);
+    }
+  }, [searchText, pokemonData])
+
   useEffect(() => {
     if (!isLoading && !isFetchingNextPage && !isFetching && hasNextPage && pokemonData?.pages && pokemonData?.pages?.length > 0 && scrollPositionFromBottom < 20) {
       void fetchNextPage();
@@ -26,11 +43,11 @@ export default function PokemonTable() {
 
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f0f0]">
-      <Header />
+      <Header onSearch={onSearch} />
       <main className="container mx-auto py-8">
         <div className='w-full flex flex-col items-center'>
-          <PokemonTableV0
-            data={pokemonData}
+          <PokemonTable
+            data={filteredResults}
             isFetching={isFetching}
             onScroll={onScroll}
           />
