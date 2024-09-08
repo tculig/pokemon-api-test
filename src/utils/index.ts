@@ -5,7 +5,7 @@ const promiseAllSettledWithRetry = async <T>(maxRetryCount: number, promiseList:
     let currentRun = 0;
     let unfulfilledPromises = promiseList;
     do {
-        if(currentRun>0){
+        if (currentRun > 0) {
             await new Promise(resolve => setTimeout(resolve, waitTime));
         }
         currentRun++;
@@ -15,8 +15,8 @@ const promiseAllSettledWithRetry = async <T>(maxRetryCount: number, promiseList:
         settledPromises.forEach((result, index) => {
             if (result.status === 'fulfilled') {
                 results.push(result.value);
-            }else{
-                if(cachedPromiseList[index]) unfulfilledPromises.push(cachedPromiseList[index])
+            } else {
+                if (cachedPromiseList[index]) unfulfilledPromises.push(cachedPromiseList[index])
             }
         });
     } while (unfulfilledPromises.length > 0 && currentRun - 1 < maxRetryCount)
@@ -26,6 +26,8 @@ const promiseAllSettledWithRetry = async <T>(maxRetryCount: number, promiseList:
 
 const isValidPokemonType = (value: string): value is PokemonType => {
     return pokemonTypes.includes(value as PokemonType);
-  };
+};
 
-export { promiseAllSettledWithRetry, isValidPokemonType }
+const zeroPad = (num: number, places: number) => String(num).padStart(places, '0')
+
+export { promiseAllSettledWithRetry, isValidPokemonType, zeroPad }

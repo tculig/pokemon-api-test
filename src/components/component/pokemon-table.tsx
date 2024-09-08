@@ -14,15 +14,15 @@ interface Props {
 
 export const PokemonTable = ({ data, isFetching, onScroll }: Props) => {
 
-  const generateRow = useCallback((data: Pokemon) => {
+  const generateRow = useCallback((pokemon: Pokemon) => {
     return (
-      <TableRow key={data.name}>
-        <TableCell className="font-bold">{data.name}</TableCell>
+      <TableRow key={pokemon.name}>
+        <TableCell className="font-bold">{pokemon.name}</TableCell>
         <TableCell>{
-          data.details?.sprites.front_default ? (
+          pokemon.details?.sprites.front_default ? (
             <Image
-              src={data.details?.sprites.front_default}
-              alt="Pikachu"
+              src={pokemon.details?.sprites.front_default}
+              alt={pokemon.name}
               width={48}
               height={48}
               className="aspect-square object-cover rounded-md"
@@ -31,7 +31,7 @@ export const PokemonTable = ({ data, isFetching, onScroll }: Props) => {
         }
         </TableCell>
         <TableCell>
-          {data.details?.types.map(
+          {pokemon.details?.types.map(
             (typeInfo) => typeInfo.type.name).map(
               (type, index) => <Badge variant="outline" type={isValidPokemonType(type) ? type : "normal"} key={index} />
             )}
@@ -52,10 +52,7 @@ export const PokemonTable = ({ data, isFetching, onScroll }: Props) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map(res => {
-              return generateRow(res)
-            })
-            }
+            {data.map(res => generateRow(res))}
             {isFetching ? (
               <SkeletonLoader rows={20} />
             ) : null}

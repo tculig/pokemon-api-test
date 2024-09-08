@@ -1,44 +1,50 @@
 "use client";
 
 import { useCallback, useEffect, useState } from 'react';
-import { FixedSizeList as List, type ListOnScrollProps, type ListChildComponentProps } from 'react-window';
-import { SkeletonLoader } from '../../components/ui/skeleton';
 import { usePokemonList } from 'data/hooks/use-pokemon-list';
-import { PokemonTableV0 } from 'components/component/pokemon-table';
 import { Pokedex } from 'components/component/pokedex';
+import { Header } from 'components/component/header';
+import { type Pokemon } from 'types/pokemon';
 
-const Row = ({ index, style }: ListChildComponentProps) => (
-  <div style={style}>Row {index}</div>
-);
 
 export default function PokemonTable() {
   const { data: pokemonData, isLoading, fetchNextPage, isFetchingNextPage, isFetching, hasNextPage } = usePokemonList();
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [filteredResults, setFilteredResults] = useState<Pokemon[]>([]);
+  const [searchText, setSearchText] = useState("");
 
-  const onScroll = useCallback(
-    (props: ListOnScrollProps) => {
-      setScrollPosition(props.scrollOffset);
-    },
-    [setScrollPosition]
-  );
+  const onSearch = useCallback((newSearchText: string) => {
+    setSearchText(newSearchText)
+  }, [])
 
   useEffect(() => {
+    if (!pokemonData || pokemonData?.pages?.length == 0) return;
+    const loadedPokemon = pokemonData.pages.map(el => el.results).flat();
+    if (searchText != "") {
+      setFilteredResults(loadedPokemon.filter(el => el.name.includes(searchText)));
+    } else {
+      setFilteredResults(loadedPokemon);
+    }
+  }, [searchText, pokemonData])
+/*
+  useEffect(() => {
     //console.log((pokemonData?.pages?.length ?? 0) * 20 * 35 - 70 - 150)
-    if (!isLoading && !isFetchingNextPage && !isFetching && hasNextPage && pokemonData?.pages && pokemonData?.pages?.length > 0 && scrollPosition > ((pokemonData?.pages?.length ?? 0) * 20 * 35 - 70 - 150)) {
+    if (!isLoading && !isFetchingNextPage && !isFetching && hasNextPage && pokemonData?.pages && pokemonData?.pages?.length > 0 ) {
       console.log("FETCH NEXT PAGE")
       void fetchNextPage();
     }
-  }, [fetchNextPage, scrollPosition, isLoading, pokemonData?.pages?.length, isFetchingNextPage, hasNextPage, isFetching, pokemonData?.pages])
-
+  }, [fetchNextPage, isLoading, pokemonData?.pages?.length, isFetchingNextPage, hasNextPage, isFetching, pokemonData?.pages])
+*/
   //console.log(scrollPosition + " " + isLoading + " " + isFetching + " " + isFetchingNextPage);
   return (
-    <div>
-      {isLoading ? (
-        <div>Loading</div>
-      ) :
-        (
-          <Pokedex/>
-        )}
+    <div className="flex flex-col min-h-screen bg-[#f0f0f0]">
+        <Header onSearch={onSearch} />
+        
+      <main className="container mx-auto py-8">
+       <Pokedex 
+          data={filteredResults}
+          isFetching={isFetching}
+          />
+          </main>
     </div>
   );
 }
