@@ -1,53 +1,43 @@
 "use client";
 
 import { useCallback, useEffect, useState } from 'react';
-import { FixedSizeList as List, type ListOnScrollProps, type ListChildComponentProps } from 'react-window';
-import { SkeletonLoader } from '../../components/skeleton';
 import { usePokemonList } from 'data/hooks/use-pokemon-list';
 import { PokemonTableV0 } from 'components/component/pokemon-table';
-
-const Row = ({ index, style }: ListChildComponentProps) => (
-  <div style={style}>Row {index}</div>
-);
+import { Header } from 'components/component/header';
 
 export default function PokemonTable() {
   const { data: pokemonData, isLoading, fetchNextPage, isFetchingNextPage, isFetching, hasNextPage } = usePokemonList();
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [scrollPositionFromBottom, setScrollPositionFromBottom] = useState(999);
 
   const onScroll = useCallback(
-    (props: ListOnScrollProps) => {
-      setScrollPosition(props.scrollOffset);
+    (event: React.UIEvent<HTMLElement>) => {
+      const totalScrollHeight = event.currentTarget?.scrollHeight - event.currentTarget?.clientHeight;
+      const scrollPosition = event.currentTarget?.scrollTop;
+      setScrollPositionFromBottom(totalScrollHeight - scrollPosition)
     },
-    [setScrollPosition]
+    [setScrollPositionFromBottom]
   );
 
   useEffect(() => {
-    //console.log((pokemonData?.pages?.length ?? 0) * 20 * 35 - 70 - 150)
-    if (!isLoading && !isFetchingNextPage && !isFetching && hasNextPage && pokemonData?.pages && pokemonData?.pages?.length > 0 && scrollPosition > ((pokemonData?.pages?.length ?? 0) * 20 * 35 - 70 - 150)) {
-      console.log("FETCH NEXT PAGE")
+    if (!isLoading && !isFetchingNextPage && !isFetching && hasNextPage && pokemonData?.pages && pokemonData?.pages?.length > 0 && scrollPositionFromBottom < 20) {
       void fetchNextPage();
     }
-  }, [fetchNextPage, scrollPosition, isLoading, pokemonData?.pages?.length, isFetchingNextPage, hasNextPage, isFetching, pokemonData?.pages])
+  }, [fetchNextPage, scrollPositionFromBottom, isLoading, pokemonData?.pages?.length, isFetchingNextPage, hasNextPage, isFetching, pokemonData?.pages])
 
-  //console.log(scrollPosition + " " + isLoading + " " + isFetching + " " + isFetchingNextPage);
   return (
-    <div>
-      <h1>Pokémon Table</h1>
-      {isLoading ? (
-        <SkeletonLoader/>
-      ) :
-        (
-          <div><PokemonTableV0 /><List
-            height={150}
-            itemCount={(pokemonData?.pages?.length ?? 0) * 20}
-            itemSize={35}
-            width={300}
+    <div className="flex flex-col min-h-screen bg-[#f0f0f0]">
+      <Header />
+      <main className="container mx-auto py-8">
+        <div className='w-full flex flex-col items-center'>
+          <PokemonTableV0
+            data={pokemonData}
+            isFetching={isFetching}
             onScroll={onScroll}
-          >
-            {Row}
-          </List>
-          </div>
-        )}
+          />
+        </div>
+      </main>
     </div>
   );
 }
+
+

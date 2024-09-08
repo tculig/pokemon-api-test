@@ -23,28 +23,15 @@ To read more about using these font, please visit the Next.js documentation:
 - App Directory: https://nextjs.org/docs/app/building-your-application/optimizing/fonts
 - Pages Directory: https://nextjs.org/docs/pages/building-your-application/optimizing/fonts
 **/
+
 import Link from "next/link"
-import { Input } from "components/ui/input"
 import { type JSX, type SVGProps } from "react"
+import { Header } from "./header"
 
 export function Pokedex() {
   return (
     <div className="flex flex-col min-h-screen bg-[#f0f0f0]">
-      <header className="bg-[#e3350d] py-4 px-6 shadow-md">
-        <div className="container mx-auto flex items-center justify-between">
-          <Link href="#" className="text-white font-bold text-2xl" prefetch={false}>
-            Pokédex
-          </Link>
-          <div className="relative">
-            <Input
-              type="text"
-              placeholder="Search Pokémon..."
-              className="bg-white rounded-full py-2 px-4 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-[#e3350d] focus:border-transparent"
-            />
-            <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-          </div>
-        </div>
-      </header>
+      <Header/>
       <main className="container mx-auto py-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -298,22 +285,4 @@ function GrapeIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
 }
 
 
-function SearchIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
-  )
-}
+

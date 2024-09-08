@@ -10,7 +10,7 @@ function PagesWrapper({
 }>) {
   return (
     <QueryClientProvider client={queryClient}>
-     {children}
+      {children}
     </QueryClientProvider>
   );
 }

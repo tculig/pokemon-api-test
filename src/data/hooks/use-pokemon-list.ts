@@ -17,7 +17,13 @@ const usePokemonList = () =>
                     const details = await detailsResponse.json() as PokemonDetails;
                     return {
                         name: pokemon.name,
-                        details,
+                        details:{
+                            id: details.id,
+                            sprites: {
+                                front_default: details.sprites.front_default
+                            },
+                            types: details.types
+                        },
                     };
                 })
             )

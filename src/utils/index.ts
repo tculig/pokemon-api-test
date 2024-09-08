@@ -1,3 +1,5 @@
+import { type PokemonType, pokemonTypes } from "types/pokemon";
+
 const promiseAllSettledWithRetry = async <T>(maxRetryCount: number, promiseList: Promise<T>[], waitTime = 1000): Promise<T[]> => {
     const results: T[] = [];
     let currentRun = 0;
@@ -22,4 +24,8 @@ const promiseAllSettledWithRetry = async <T>(maxRetryCount: number, promiseList:
     return results;
 }
 
-export { promiseAllSettledWithRetry }
+const isValidPokemonType = (value: string): value is PokemonType => {
+    return pokemonTypes.includes(value as PokemonType);
+  };
+
+export { promiseAllSettledWithRetry, isValidPokemonType }

@@ -34,7 +34,7 @@ export default function PokemonTable() {
   return (
     <div>
       {isLoading ? (
-        <SkeletonLoader/>
+        <div>Loading</div>
       ) :
         (
           <Pokedex/>
