@@ -11,7 +11,23 @@ export interface PokemonResponse {
     results: Pokemon[];
 }
 
-export interface PokemonDetails {
+interface ExtendedPokemonDetails {
+    abilities: Array<{
+        ability:{
+            name: string
+        }
+    }>,
+    stats: Array<{
+        base_stat: number,
+        effort: number,
+        stat:{
+            name: string,
+            url: string,
+        }
+    }>
+}
+
+export interface PokemonDetails extends ExtendedPokemonDetails{
     id: number;
     sprites: {
         front_default: string;

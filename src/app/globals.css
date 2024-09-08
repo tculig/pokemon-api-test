@@ -25,6 +25,10 @@
     --ring: 36 45% 30%;
     --radius: 1rem;
   }
+  .header {
+    position: sticky;
+    top: 0;
+  }
 
   .skeleton {
     background-color: #ddd;

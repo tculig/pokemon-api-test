@@ -16,7 +16,8 @@ const Header = ({onSearch}:Props) => {
     onSearch(searchTextDebounced)
   },[onSearch, searchTextDebounced])
 
-  return (<header className="bg-[#e3350d] py-4 px-6 shadow-md">
+  return (
+  <header className="bg-[#e3350d] py-4 px-6 shadow-md header z-50">
     <div className="container mx-auto flex items-center justify-between">
       <Link href="#" className="text-white font-bold text-2xl" prefetch={false}>
         Pokédex

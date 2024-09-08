@@ -42,8 +42,9 @@ export default function PokemonTableView() {
   }, [fetchNextPage, scrollPositionFromBottom, isLoading, pokemonData?.pages?.length, isFetchingNextPage, hasNextPage, isFetching, pokemonData?.pages])
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#f0f0f0]">
+    <div className="flex h-96 flex-col min-h-screen bg-[#f0f0f0]">
       <Header onSearch={onSearch} />
+      <div className="w-full overflow-auto">
       <main className="container mx-auto py-8">
         <div className='w-full flex flex-col items-center'>
           <PokemonTable
@@ -53,6 +54,7 @@ export default function PokemonTableView() {
           />
         </div>
       </main>
+      </div>
     </div>
   );
 }

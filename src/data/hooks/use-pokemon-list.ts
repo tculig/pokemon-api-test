@@ -22,7 +22,9 @@ const usePokemonList = () =>
                             sprites: {
                                 front_default: details.sprites.front_default
                             },
-                            types: details.types
+                            types: details.types,
+                            abilities: details.abilities,
+                            stats: details.stats,
                         },
                     };
                 })

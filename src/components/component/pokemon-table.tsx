@@ -1,10 +1,11 @@
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "../ui/table"
 import { Badge } from "../ui/badge"
 import { type Pokemon } from "types/pokemon"
-import { type UIEventHandler, useCallback } from "react"
+import { type UIEventHandler, useCallback, useState } from "react"
 import Image from "next/image";
 import { isValidPokemonType } from "utils"
-import { SkeletonLoader } from "components/ui/skeleton"
+import { SkeletonTableRow } from "components/ui/skeletons"
+import { DetailsModal } from "./details-modal";
 
 interface Props {
   data: Pokemon[],
@@ -14,9 +15,15 @@ interface Props {
 
 export const PokemonTable = ({ data, isFetching, onScroll }: Props) => {
 
+  const [open, setOpen] = useState(false)
+  const [selectedPokemon, setSelectedPokemon] = useState<Pokemon>()
+
   const generateRow = useCallback((pokemon: Pokemon) => {
     return (
-      <TableRow key={pokemon.name}>
+      <TableRow key={pokemon.name} onClick={()=>{
+        setSelectedPokemon(pokemon);
+        setOpen(true);
+      }}>
         <TableCell className="font-bold">{pokemon.name}</TableCell>
         <TableCell>{
           pokemon.details?.sprites.front_default ? (
@@ -54,11 +61,14 @@ export const PokemonTable = ({ data, isFetching, onScroll }: Props) => {
           <TableBody>
             {data.map(res => generateRow(res))}
             {isFetching ? (
-              <SkeletonLoader rows={20} />
+                Array.from({ length: 20 }).map((_, index) => (
+                  <SkeletonTableRow key={index}/>
+                ))
             ) : null}
           </TableBody>
         </Table>
       </div>
+      <DetailsModal open={open} setOpen={setOpen} pokemon={selectedPokemon}/>
     </div>
   )
 }
