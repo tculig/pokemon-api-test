@@ -2,6 +2,8 @@
 
 Assignment at https://github.com/mmiro-balize/frontend-test
 
+App available at https://balize-frontend-test.vercel.app/
+
 ## Requirements
 
 1. **Fetch Pokémon Data:**
