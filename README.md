@@ -4,7 +4,7 @@ Assignment at https://github.com/mmiro-balize/frontend-test
 
 App available at https://balize-frontend-test.vercel.app/
 
-[![Watch the video](https://img.youtube.com/vi/M--gbavnR5A/0.jpg)](https://youtu.be/M--gbavnR5A)
+![Watch the video](https://postimg.cc/940dGCb4)](https://youtu.be/M--gbavnR5A)
 
 ## Requirements
 
