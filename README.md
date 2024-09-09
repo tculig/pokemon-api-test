@@ -1,6 +1,6 @@
 # Frontend Coding Interview Test
 
-Assignment at `https://github.com/mmiro-balize/frontend-test`
+Assignment at https://github.com/mmiro-balize/frontend-test
 
 ## Requirements
 
@@ -23,7 +23,7 @@ Skeletons are present for all loading data.
 ## Visual design
 I implemented two layout designs, conveniently labeled "Layout 1" and "Layout 2" in the page header component.
 "Layout 1" strictly follows the assignment parameters: render table with 3 columns: name, image, types.
-"Layout 2" is what I would ship to prod if it was my app. I took some inspiration from the official pokemon page at `https://www.pokemon.com/us/pokedex`, and then spruced it up a bit.
+"Layout 2" is what I would ship to prod if it was my app. I took some inspiration from the official pokemon page at https://www.pokemon.com/us/pokedex, and then spruced it up a bit.
 
 ## Extra content
 I added a details modal for each pokemon. Just because it felt like there should be some interaction with the page. The data is already given on the api call that fetches images and types, so it was basically free.
@@ -34,7 +34,7 @@ Not much error handling in the app. If it was going to prod, there would need to
 
 ## SSR
 The app is mostly client side, as it was the industry standard for many, many years. Recently Server Side Rendering has made a big splash, and people started using it just because its the new shiny thing. Personally, I don't think its justified for small and medium projects. All it does is shift the cost from client to server, and if you're the company running the page...we'll, you're not paying for the client costs, but you sure are paying for the server costs. 
-Having said all of that, there is a path to moving all this server side, there even seems to be some wrapper libraries to use for this `https://github.com/PokeAPI/pokedex-promise-v2`.
+Having said all of that, there is a path to moving all this server side, there even seems to be some wrapper libraries to use for this https://github.com/PokeAPI/pokedex-promise-v2.
 
 ## Caching
 No caching, just pure spam on the API! =D
