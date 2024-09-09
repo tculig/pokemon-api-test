@@ -26,7 +26,7 @@ const Header = ({onSearch}:Props) => {
       <Link href="/pokemontable" className="text-white text-l" prefetch={false}>
         Layout 1
       </Link>
-      <Link href="/pokedex" className="text-white text-l px-8" prefetch={false}>
+      <Link href="/pokemoncards" className="text-white text-l px-8" prefetch={false}>
         Layout 2
       </Link>
       </div>

@@ -5,18 +5,18 @@ import { usePokemonList } from 'data/hooks/use-pokemon-list';
 import { PokemonTable } from 'components/component/pokemon-table';
 import { Header } from 'components/component/header';
 import { type Pokemon } from 'types/pokemon';
+import { scrollPosFromBottom } from 'utils';
 
 export default function PokemonTableView() {
-  const { data: pokemonData, isLoading, fetchNextPage, isFetchingNextPage, isFetching, hasNextPage } = usePokemonList();
+  const { data: pokemonData, isLoading, fetchNextPage, isFetching, hasNextPage } = usePokemonList();
   const [scrollPositionFromBottom, setScrollPositionFromBottom] = useState(999);
   const [filteredResults, setFilteredResults] = useState<Pokemon[]>([]);
   const [searchText, setSearchText] = useState("");
 
   const onScroll = useCallback(
     (event: React.UIEvent<HTMLElement>) => {
-      const totalScrollHeight = event.currentTarget?.scrollHeight - event.currentTarget?.clientHeight;
-      const scrollPosition = event.currentTarget?.scrollTop;
-      setScrollPositionFromBottom(totalScrollHeight - scrollPosition)
+      const fromBottom = scrollPosFromBottom(event);
+      setScrollPositionFromBottom(fromBottom)
     },
     [setScrollPositionFromBottom]
   );
@@ -36,10 +36,10 @@ export default function PokemonTableView() {
   }, [searchText, pokemonData])
 
   useEffect(() => {
-    if (!isLoading && !isFetchingNextPage && !isFetching && hasNextPage && pokemonData?.pages && pokemonData?.pages?.length > 0 && scrollPositionFromBottom < 20) {
+    if (!isLoading && !isFetching && hasNextPage && pokemonData?.pages && pokemonData?.pages?.length > 0 && scrollPositionFromBottom < 20) {
       void fetchNextPage();
     }
-  }, [fetchNextPage, scrollPositionFromBottom, isLoading, pokemonData?.pages?.length, isFetchingNextPage, hasNextPage, isFetching, pokemonData?.pages])
+  }, [fetchNextPage, scrollPositionFromBottom, isLoading, pokemonData?.pages?.length, hasNextPage, isFetching, pokemonData?.pages])
 
   return (
     <div className="flex h-96 flex-col min-h-screen bg-[#f0f0f0]">

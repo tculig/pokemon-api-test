@@ -28,6 +28,12 @@ const isValidPokemonType = (value: string): value is PokemonType => {
     return pokemonTypes.includes(value as PokemonType);
 };
 
-const zeroPad = (num: number, places: number) => String(num).padStart(places, '0')
+const zeroPad = (num: number, places: number) => String(num).padStart(places, '0');
 
-export { promiseAllSettledWithRetry, isValidPokemonType, zeroPad }
+const scrollPosFromBottom = (event: React.UIEvent<HTMLElement>) : number=>{
+    const totalScrollHeight = event.currentTarget?.scrollHeight - event.currentTarget?.clientHeight;
+    const scrollPosition = event.currentTarget?.scrollTop;
+    return totalScrollHeight - scrollPosition;
+}
+
+export { promiseAllSettledWithRetry, isValidPokemonType, zeroPad, scrollPosFromBottom }

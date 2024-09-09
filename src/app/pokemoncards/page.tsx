@@ -2,25 +2,34 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { usePokemonList } from "data/hooks/use-pokemon-list";
-import { Pokedex } from "components/component/pokedex";
+import { PokemonCards } from "components/component/pokemon-cards";
 import { Header } from "components/component/header";
 import { type Pokemon } from "types/pokemon";
+import { scrollPosFromBottom } from "utils";
 
 export default function PokemonTable() {
   const {
     data: pokemonData,
     isLoading,
     fetchNextPage,
-    isFetchingNextPage,
     isFetching,
     hasNextPage,
   } = usePokemonList();
   const [filteredResults, setFilteredResults] = useState<Pokemon[]>([]);
   const [searchText, setSearchText] = useState("");
+  const [scrollPositionFromBottom, setScrollPositionFromBottom] = useState(999);
 
   const onSearch = useCallback((newSearchText: string) => {
     setSearchText(newSearchText);
   }, []);
+
+  const onScroll = useCallback(
+    (event: React.UIEvent<HTMLElement>) => {
+      const fromBottom = scrollPosFromBottom(event);
+      setScrollPositionFromBottom(fromBottom)
+    },
+    [setScrollPositionFromBottom]
+  );
 
   useEffect(() => {
     if (!pokemonData || pokemonData?.pages?.length == 0) return;
@@ -33,22 +42,19 @@ export default function PokemonTable() {
       setFilteredResults(loadedPokemon);
     }
   }, [searchText, pokemonData]);
-  /*
+
   useEffect(() => {
-    //console.log((pokemonData?.pages?.length ?? 0) * 20 * 35 - 70 - 150)
-    if (!isLoading && !isFetchingNextPage && !isFetching && hasNextPage && pokemonData?.pages && pokemonData?.pages?.length > 0 ) {
-      console.log("FETCH NEXT PAGE")
+    if (!isLoading && !isFetching && hasNextPage && pokemonData?.pages && pokemonData?.pages?.length > 0 && scrollPositionFromBottom < 20) {
       void fetchNextPage();
     }
-  }, [fetchNextPage, isLoading, pokemonData?.pages?.length, isFetchingNextPage, hasNextPage, isFetching, pokemonData?.pages])
-*/
-  //console.log(scrollPosition + " " + isLoading + " " + isFetching + " " + isFetchingNextPage);
+  }, [fetchNextPage, isLoading, pokemonData?.pages?.length, hasNextPage, isFetching, pokemonData?.pages, scrollPositionFromBottom])
+
   return (
     <div className="flex h-96 min-h-screen flex-col bg-[#f0f0f0]">
       <Header onSearch={onSearch} />
-      <div className="w-full overflow-auto">
+      <div className="w-full overflow-auto" onScroll={onScroll}>
         <main className="container mx-auto py-8">
-          <Pokedex data={filteredResults} isFetching={isFetching} />
+          <PokemonCards data={filteredResults} isFetching={isFetching} />
         </main>
       </div>
     </div>
