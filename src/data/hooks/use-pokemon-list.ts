@@ -1,5 +1,5 @@
 
-import { type PokemonDetails, type PokemonResponse } from 'types/pokemon';
+import { PokemonDetailsSchema, PokemonResponseSchema, type PokemonDetails, type PokemonResponse } from 'types/pokemon';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { promiseAllSettledWithRetry } from 'utils';
 
@@ -10,21 +10,23 @@ const usePokemonList = () =>
             const pokemonData = await fetch(pageUrl).then(async (res) =>
                 await res.json() as PokemonResponse,
             )
+            const pokemonDataParsed = PokemonResponseSchema.parse(pokemonData);
 
             const detailedData = await promiseAllSettledWithRetry(3, 
-                pokemonData.results.map(async (pokemon) => {
+                pokemonDataParsed.results.map(async (pokemon) => {
                     const detailsResponse = await fetch(pokemon.url);
                     const details = await detailsResponse.json() as PokemonDetails;
+                    const parsedDetails = PokemonDetailsSchema.parse(details);
                     return {
                         name: pokemon.name,
                         details:{
-                            id: details.id,
+                            id: parsedDetails.id,
                             sprites: {
-                                front_default: details.sprites.front_default
+                                front_default: parsedDetails.sprites.front_default
                             },
-                            types: details.types,
-                            abilities: details.abilities,
-                            stats: details.stats,
+                            types: parsedDetails.types,
+                            abilities: parsedDetails.abilities,
+                            stats: parsedDetails.stats,
                         },
                     };
                 })

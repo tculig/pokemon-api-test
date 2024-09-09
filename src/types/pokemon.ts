@@ -1,44 +1,54 @@
-export interface Pokemon {
-    name: string;
-    url: string;
-    details?: PokemonDetails
-}
+import { z } from "zod";
 
-export interface PokemonResponse {
-    count: number;
-    next: string | null;
-    previous: string | null;
-    results: Pokemon[];
-}
+const ExtendedPokemonDetailsSchema =
+    z.object({
+        abilities: z.array(z.object({
+            ability: z.object({
+                name: z.string(),
+            })
+        })),
+        stats: z.array(z.object({
+            base_stat: z.number(),
+            effort: z.number(),
+            stat: z.object({
+                name: z.string(),
+                url: z.string(),
+            })
+        })),
+    });
+const BasePokemonDetailsSchema =
+    z.object({
+        id: z.number(),
+        sprites: z.object({
+            front_default: z.string(),
+        }),
+        types: z.array(z.object({
+            slot: z.number(),
+            type: z.object({
+                name: z.string(),
+            })
+        })),
+    });
+export const PokemonDetailsSchema = BasePokemonDetailsSchema.merge(ExtendedPokemonDetailsSchema);
 
-interface ExtendedPokemonDetails {
-    abilities: Array<{
-        ability:{
-            name: string
-        }
-    }>,
-    stats: Array<{
-        base_stat: number,
-        effort: number,
-        stat:{
-            name: string,
-            url: string,
-        }
-    }>
-}
+export const PokemonSchema = z.object({
+    name: z.string(),
+    url: z.string(),
+    details: PokemonDetailsSchema.optional(),
+});
 
-export interface PokemonDetails extends ExtendedPokemonDetails{
-    id: number;
-    sprites: {
-        front_default: string;
-    };
-    types: Array<{
-        slot: number;
-        type: {
-            name: string;
-        };
-    }>;
-}
+export const PokemonResponseSchema = z.object({
+    count: z.number(),
+    next: z.string().nullable(),
+    previous: z.string().nullable(),
+    results: z.array(PokemonSchema),
+});
+
+export type Pokemon = z.infer<typeof PokemonSchema>;
+export type PokemonResponse = z.infer<typeof PokemonResponseSchema>;
+export type ExtendedPokemonDetails = z.infer<typeof ExtendedPokemonDetailsSchema>;
+export type PokemonDetails = z.infer<typeof PokemonDetailsSchema>;
+
 
 export const pokemonTypes = [
     "normal",

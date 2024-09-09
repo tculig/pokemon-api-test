@@ -19,7 +19,7 @@ const Header = ({onSearch}:Props) => {
   return (
   <header className="bg-[#e3350d] py-4 px-6 shadow-md header z-50">
     <div className="container mx-auto flex items-center justify-between">
-      <Link href="#" className="text-white font-bold text-2xl" prefetch={false}>
+      <Link href="/" className="text-white font-bold text-2xl" prefetch={false}>
         Pokédex
       </Link>
       <div className="flex flex-grow px-12">
