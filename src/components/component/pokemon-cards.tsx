@@ -73,7 +73,7 @@ export const PokemonCards = ({ data, isFetching }: Props) => {
 
   return (
     <>
-    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mx-4">
       {data.map((res, index) => generateItem(res, index))}
       {pokemonTypes.map((type) => (
         <Tooltip id={`tooltip-type-${type}`} key={type} />
