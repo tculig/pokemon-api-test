@@ -1,18 +1,61 @@
+
 ## Requirements
 
 1. **Fetch Pokémon Data:**
+
+   - Use the Pokémon API endpoint: `https://pokeapi.co/api/v2/pokemon` to fetch a list of Pokémon.
+   - The API returns a JSON object with the following structure:
+     ```typescript
+     {
+       count: number; // Total number of Pokémon
+       next: string | null; // URL for the next page of results
+       previous: string | null; // URL for the previous page of results
+       results: {
+         name: string;
+         url: string;
+       }
+       []; // List of Pokémon
+     }
+     ```
+
 2. **Create Initial Data Table:**
+
+   - Render the Pokémon in a data table with a single column:
+     - **Name:** Display the name of the Pokémon.
+   - At this stage, only the "Name" column should be populated since this is the only data available after the initial API fetch.
+
 3. **Enhance Data Table with Additional Columns:**
-I've tried this approach, and all it was doin was causing UI flickering and shifts, simply because the API endpoinds are so fast, the enhanced data is available in a fraction of a second. I've thus decided to merge both of these calls in one, and present the finished data. Having pokemon names visible without the enhanced data isn't much use anyways. I've thus chained the details calls for each pokemon in a Promise.All, which makes all the API calls concurrent. This works well, but if any of the 20 calls fails, the whole Promise.all fails. So I used Promise.allSettled which avoids the issue, but causes an issue of not having retries for failed calls. So I've implemented a utility function called ```promiseAllSettledWithRetry```, and am using 3 retries in the app.
-This all works well, and is fast and robust. 
-I used zod for some API response validation.
-```data/hooks/use-pokemon-list.ts```
-```types/use-pokemon-list.ts```
-```utils/index.ts```
+
+   - For each Pokémon in the table, use the `url` provided in the `results` to fetch additional details from each Pokémon's individual endpoint.
+   - - The API returns a JSON object with the following structure:
+     ```typescript
+     {
+       id: number;
+       sprites: {
+         front_default: string;
+       } // Image URLs
+       types: {
+         slot: number;
+         type: {
+           name: string;
+         }
+       }
+       [];
+     }
+     ```
+   - Add two new columns to the data table:
+     - **Image:** Fetch and display each Pokémon's image (sprite).
+     - **Types:** Fetch and display each Pokémon's types.
+
 4. **Pagination or Infinite Scroll:**
-I'm using infinite scroll in the app. It just seems like a more elegant option. It does have the drawback of having to scroll for hours to get to the last pokemon, but for this demo, I'm sticking with the infinite scroll scenario.
+   - Implement either pagination or infinite scrolling to allow fetching and displaying the next set of Pokémon using the `next` property from the API response.
+   - If pagination is chosen, provide controls to navigate between pages.
+   - If infinite scrolling is chosen, automatically fetch and display the next set of Pokémon as the user scrolls down.
 5. **Skeleton Loading State:**
-Skeletons are present for all loading data.
+   - Render a skeleton data table while the API data is being fetched.
+   - Style the skeleton table to match the design of the final data table (e.g. using the same colors, column widths, etc.).
+   - The table must cleary indicate that the data is being fetched (e.g. with animated skeleton elements).
+
 
 # Comments
 
